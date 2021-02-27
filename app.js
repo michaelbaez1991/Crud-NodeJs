@@ -1,6 +1,6 @@
 var express = require('express')
-var oApp = express()
-var port = express()
+const oApp = express()
+const port = 3000
 const mysql = require('mysql');
 
 oApp.use(express.json()); 
@@ -15,118 +15,119 @@ const oMyConnection = mysql.createConnection({
 });
 
 // LISTAR REGISTROS
-// oApp.get('/gato', function(oReq, oRes) {
-//     var sSQLGetAll = "SELECT * FROM gatos";
-//     oMyConnection.query(sSQLGetAll, function(oError, oRows, oCols) {
-//         if(oError) {
-//             oRes.write(JSON.stringify({
-//                 error: true,
-//                 error_object: oError         
-//             }));
-//             oRes.end();
-//         } else {
-//             oRes.write(JSON.stringify(oRows));
-//             oRes.end();       
-//         }
-//     });
-// });   
+oApp.get('/gato', function(oReq, oRes) {
+    var sSQLGetAll = "SELECT * FROM gatos";
+    oMyConnection.query(sSQLGetAll, function(oError, oRows, oCols) {
+        if(oError) {
+            oRes.write(JSON.stringify({
+                error: true,
+                error_object: oError         
+            }));
+            oRes.end();
+        } else {
+            oRes.write(JSON.stringify(oRows));
+            oRes.end();       
+        }
+    });
+});   
 
 // CREAR REGISTRO
-// oApp.post('/gato', function (req, res) {
-//   var oDataOP = {};  
-//   oDataOP = req.body.data_op;
+oApp.post('/gato', function (req, res) {
+  var oDataOP = {};  
+  oDataOP = req.body;
 
-//   var sSQLCreate = "INSERT INTO gatos (nombre, raza, color, edad, peso) VALUES (";
-//     sSQLCreate += "'" + oDataOP.nombre + "', ";
-//     sSQLCreate += "'" + oDataOP.raza + "', ";
-//     sSQLCreate += "'" + oDataOP.color + "', ";
-//     sSQLCreate += "'" + oDataOP.edad + "', ";
-//     sSQLCreate += "'" + oDataOP.peso + "')";
+  var sSQLCreate = "INSERT INTO gatos (nombre, raza, color, edad, peso) VALUES (";
+    sSQLCreate += "'" + oDataOP.nombre + "', ";
+    sSQLCreate += "'" + oDataOP.raza + "', ";
+    sSQLCreate += "'" + oDataOP.color + "', ";
+    sSQLCreate += "'" + oDataOP.edad + "', ";
+    sSQLCreate += "'" + oDataOP.peso + "')";
       
-//     oMyConnection.query(sSQLCreate, function(oError, oRows, oCols) {
-//         if(oError) {
-//             res.write(JSON.stringify({
-//                 error: true,
-//                 error_object: oError
-//             }));
-//             res.end();      
-//         } else {
-//             var iIDCreated = oRows.insertId;
-//             res.write(JSON.stringify({
-//                 error: false,
-//                 idCreated: iIDCreated
-//             }));
-//             res.end();      
-//         }    
-//     });  
-// });
+    oMyConnection.query(sSQLCreate, function(oError, oRows, oCols) {
+        if(oError) {
+            res.write(JSON.stringify({
+                error: true,
+                error_object: oError
+            }));
+            res.end();      
+        } else {
+            var iIDCreated = oRows.insertId;
+            res.write(JSON.stringify({
+                error: false,
+                idCreated: iIDCreated
+            }));
+            res.end();      
+        }    
+    });  
+});
 
 // EDITAR REGISTRO
-// oApp.put('/gato', function (req, res) {
-//   var oDataOP = {};  
-//   oDataOP = req.body;
+oApp.put('/gato', function (req, res) {
+  var oDataOP = {};  
+  oDataOP = req.body;
 
-//   var sSQLUpdate = "UPDATE gatos SET ";
-//   if(oDataOP.hasOwnProperty('nombre')) {
-//     sSQLUpdate += "nombre = '" + oDataOP.nombre + "' ";
-//   }
+  var sSQLUpdate = "UPDATE gatos SET ";
+  if(oDataOP.hasOwnProperty('nombre')) {
+    sSQLUpdate += "nombre = '" + oDataOP.nombre + "' ";
+  }
 
-//   if(oDataOP.hasOwnProperty('raza')) {
-//     sSQLUpdate += ", raza = '" + oDataOP.raza + "' ";
-//   }
+  if(oDataOP.hasOwnProperty('raza')) {
+    sSQLUpdate += ", raza = '" + oDataOP.raza + "' ";
+  }
 
-//   if(oDataOP.hasOwnProperty('color')) {
-//     sSQLUpdate += ", color = '" + oDataOP.color + "' ";
-//   }
+  if(oDataOP.hasOwnProperty('color')) {
+    sSQLUpdate += ", color = '" + oDataOP.color + "' ";
+  }
 
-//   if(oDataOP.hasOwnProperty('edad')) {
-//     sSQLUpdate += ", edad = " + oDataOP.edad + " ";
-//   }
+  if(oDataOP.hasOwnProperty('edad')) {
+    sSQLUpdate += ", edad = " + oDataOP.edad + " ";
+  }
 
-//   if(oDataOP.hasOwnProperty('peso')) {
-//     sSQLUpdate += ", peso = " + oDataOP.peso + " ";    
-//   }   
+  if(oDataOP.hasOwnProperty('peso')) {
+    sSQLUpdate += ", peso = " + oDataOP.peso + " ";    
+  }   
 
-//   sSQLUpdate += " WHERE id_gato = " + oDataOP.idgato;
+  sSQLUpdate += " WHERE id_gato = " + oDataOP.idgato;
   
-//   oMyConnection.query(sSQLUpdate, function(oErrUpdate, oRowsUpdate, oColsUpdate) {
-//     if(oErrUpdate) {
-//       res.write(JSON.stringify({ 
-//         error: true,
-//         error_object: oErrUpdate
-//       }));
-//       res.end();      
-//     } else {
-//       res.write(JSON.stringify({
-//         error: false
-//       }));
-//       res.end();
-//     }
-//   });
-// });  
+  oMyConnection.query(sSQLUpdate, function(oErrUpdate, oRowsUpdate, oColsUpdate) {
+    if(oErrUpdate) {
+      res.write(JSON.stringify({ 
+        error: true,
+        error_object: oErrUpdate
+      }));
+      res.end();      
+    } else {
+      res.write(JSON.stringify({
+        error: false
+      }));
+      res.end();
+    }
+  });
+});  
 
 // ELIMINAR REGISTRO
-// oApp.delete('/gato', function (req, res) {
-//   oDataOP = req.body.idgato;
+oApp.delete('/gato', function (req, res) {
+  oDataOP = req.body;
 
-//   var sSQLDelete = "DELETE FROM gatos WHERE id_gato = " + oDataOP;
-//   oMyConnection.query(sSQLDelete, function(oErrDelete, oRowsDelete, oColsDelete) {
-//     if(oErrDelete) {
-//       res.write(JSON.stringify({
-//         error: true,
-//         error_object: oErrDelete
-//       }));
-//       res.end();
-//     } else {
-//       res.write(JSON.stringify({
-//         error: false
-//       }));
-//       res.end();      
-//     }    
-//   });  
-// });
+  var sSQLDelete = "DELETE FROM gatos WHERE id_gato = " + oDataOP.idgato;
+  oMyConnection.query(sSQLDelete, function(oErrDelete, oRowsDelete, oColsDelete) {
+    if(oErrDelete) {
+      res.write(JSON.stringify({
+        error: true,
+        error_object: oErrDelete
+      }));
+      res.end();
+    } else {
+      res.write(JSON.stringify({
+        error: false
+      }));
+      res.end();      
+    }    
+  });  
+});
 
-oApp.all('/gato', function (req, res, next) {
+// ALL METHOD REQUEST GET - POST - PUT - DELETE
+oApp.all('/gatos', function (req, res, next) {
   var oDataOP = {};  
   oDataOP = req.body;
 
@@ -215,7 +216,8 @@ oApp.all('/gato', function (req, res, next) {
   }
   // next(); // pass control to the next handler
 });
- 
+
+// PUERTO ESCUCHA DE LA APP
 oApp.listen(port, function(oReq, oRes) {
-    console.log("Servicios web gestión entidad GATO activo, en puerto 3000");   
+  console.log("Servicios web gestión entidad GATO activo, en puerto 3000");   
 });
